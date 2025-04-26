@@ -16,5 +16,11 @@ namespace lab3
         {
             InitializeComponent();
         }
+
+        private void btnVar4_Click(object sender, EventArgs e)
+        {
+            Variant_4 variantForm = new Variant_4();
+            variantForm.Show();
+        }
     }
 }
