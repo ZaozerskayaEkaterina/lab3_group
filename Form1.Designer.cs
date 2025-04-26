@@ -33,7 +33,7 @@
             // 
             // btnVar4
             // 
-            this.btnVar4.Location = new System.Drawing.Point(78, 172);
+            this.btnVar4.Location = new System.Drawing.Point(77, 193);
             this.btnVar4.Name = "btnVar4";
             this.btnVar4.Size = new System.Drawing.Size(106, 54);
             this.btnVar4.TabIndex = 0;
