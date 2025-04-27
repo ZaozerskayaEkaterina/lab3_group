@@ -70,18 +70,30 @@ namespace lab3
                 MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        // Метод для настройки графика
+        private void ConfigureChart(Chart chart, string chartAreaName)
+        {
+            chart.ChartAreas.Clear();
+            ChartArea chartArea = new ChartArea(chartAreaName);
+            chart.ChartAreas.Add(chartArea);
 
-        // Отрисовка графика
+            // Настройка осей
+            chartArea.AxisX.Title = "Год";
+            chartArea.AxisY.Title = "Значение (в млрд долларов)";
+            chartArea.AxisX.Interval = 5; // Интервал по оси X
+            chartArea.AxisY.TitleFont = new Font("Arial", 10, FontStyle.Bold);
+            chartArea.AxisX.TitleFont = new Font("Arial", 10, FontStyle.Bold);
+        }
+
+        // Отрисовка графика для фактических данных
         private void PlotChart(DataTable dataTable)
         {
             chart1.Series.Clear();
-            chart1.ChartAreas.Clear();
 
-            ChartArea chartArea = new ChartArea("MainArea");
-            chart1.ChartAreas.Add(chartArea);
+            ConfigureChart(chart1, "MainArea");
 
             // Создаем серию для ВВП (в млрд долларов)
-            Series gdpSeries = new Series("ВВП (в млрд долларах)")
+            Series gdpSeries = new Series("ВВП (в млрд долларов)")
             {
                 ChartType = SeriesChartType.Line,
                 XValueMember = "Год",
@@ -90,7 +102,7 @@ namespace lab3
             };
 
             // Создаем серию для ВНП (в млрд долларов)
-            Series gnpSeries = new Series("ВНП (в млрд долларах)")
+            Series gnpSeries = new Series("ВНП (в млрд долларов)")
             {
                 ChartType = SeriesChartType.Line,
                 XValueMember = "Год",
@@ -107,15 +119,12 @@ namespace lab3
             chart1.DataBind();
         }
 
-
+        // Отрисовка графика для прогнозируемых данных
         private void PlotForecastChart(DataTable dataTable)
         {
-            // Очищаем предыдущие данные на новом графике
             chart2.Series.Clear();
-            chart2.ChartAreas.Clear();
 
-            ChartArea chartArea = new ChartArea("ForecastArea");
-            chart2.ChartAreas.Add(chartArea);
+            ConfigureChart(chart2, "ForecastArea");
 
             // Проверяем, есть ли фактические данные
             if (dataTable.Rows.Count > 0)
@@ -166,6 +175,7 @@ namespace lab3
             }
         }
 
+
         private void btnCalculateForecast_Click(object sender, EventArgs e)
         {
             // Получаем введенный год для прогноза
@@ -212,7 +222,71 @@ namespace lab3
 
         private void btnCalculatePercents_Click(object sender, EventArgs e)
         {
+            // Проверка наличия данных
+            if (dataTable.Rows.Count < 2)
+            {
+                richTextBox1.Text = "Недостаточно данных для анализа. Необходимо минимум 2 года.";
+                return;
+            }
 
+            decimal maxGdpGrowth = decimal.MinValue;
+            decimal maxGdpDecline = decimal.MaxValue;
+            decimal maxGnpGrowth = decimal.MinValue;
+            decimal maxGnpDecline = decimal.MaxValue;
+
+            // Проходим по строкам таблицы, начиная со второй
+            for (int i = 1; i < dataTable.Rows.Count; i++)
+            {
+                DataRow previousRow = dataTable.Rows[i - 1];
+                DataRow currentRow = dataTable.Rows[i];
+
+                decimal previousGdpValue = Convert.ToDecimal(previousRow["ВВП (в млрд долларах)"]);
+                decimal currentGdpValue = Convert.ToDecimal(currentRow["ВВП (в млрд долларах)"]);
+
+                decimal previousGnpValue = Convert.ToDecimal(previousRow["ВНП (в млрд долларах)"]);
+                decimal currentGnpValue = Convert.ToDecimal(currentRow["ВНП (в млрд долларах)"]);
+
+                // Вычисляем процентное изменение для ВВП
+                if (previousGdpValue != 0)
+                {
+                    decimal gdpGrowth = ((currentGdpValue - previousGdpValue) / previousGdpValue) * 100;
+
+                    // Обновляем максимальные значения роста и падения для ВВП
+                    if (gdpGrowth > maxGdpGrowth)
+                    {
+                        maxGdpGrowth = gdpGrowth;
+                    }
+                    if (gdpGrowth < maxGdpDecline)
+                    {
+                        maxGdpDecline = gdpGrowth;
+                    }
+                }
+
+                // Вычисляем процентное изменение для ВНП
+                if (previousGnpValue != 0)
+                {
+                    decimal gnpGrowth = ((currentGnpValue - previousGnpValue) / previousGnpValue) * 100;
+
+                    // Обновляем максимальные значения роста и падения для ВНП
+                    if (gnpGrowth > maxGnpGrowth)
+                    {
+                        maxGnpGrowth = gnpGrowth;
+                    }
+                    if (gnpGrowth < maxGnpDecline)
+                    {
+                        maxGnpDecline = gnpGrowth;
+                    }
+                }
+            }
+
+            string result = $"Максимальный процент роста ВВП: {maxGdpGrowth:F2}%\n" +
+                            $"Максимальный процент падения ВВП: {maxGdpDecline:F2}%\n" +
+                            $"Максимальный процент роста ВНП: {maxGnpGrowth:F2}%\n" +
+                            $"Максимальный процент падения ВНП: {maxGnpDecline:F2}%";
+
+            richTextBox1.Text = result;
         }
+
+
     }
 }
