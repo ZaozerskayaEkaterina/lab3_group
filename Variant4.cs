@@ -212,7 +212,69 @@ namespace lab3
 
         private void btnCalculatePercents_Click(object sender, EventArgs e)
         {
+            // Проверка наличия данных
+            if (dataTable.Rows.Count < 2)
+            {
+                richTextBox1.Text = "Недостаточно данных для анализа. Необходимо минимум 2 года.";
+                return;
+            }
 
+            decimal maxGdpGrowth = decimal.MinValue;
+            decimal maxGdpDecline = decimal.MaxValue;
+            decimal maxGnpGrowth = decimal.MinValue;
+            decimal maxGnpDecline = decimal.MaxValue;
+
+            // Проходим по строкам таблицы, начиная со второй
+            for (int i = 1; i < dataTable.Rows.Count; i++)
+            {
+                DataRow previousRow = dataTable.Rows[i - 1];
+                DataRow currentRow = dataTable.Rows[i];
+
+                decimal previousGdpValue = Convert.ToDecimal(previousRow["ВВП (в млрд долларах)"]);
+                decimal currentGdpValue = Convert.ToDecimal(currentRow["ВВП (в млрд долларах)"]);
+
+                decimal previousGnpValue = Convert.ToDecimal(previousRow["ВНП (в млрд долларах)"]);
+                decimal currentGnpValue = Convert.ToDecimal(currentRow["ВНП (в млрд долларах)"]);
+
+                // Вычисляем процентное изменение для ВВП
+                if (previousGdpValue != 0)
+                {
+                    decimal gdpGrowth = ((currentGdpValue - previousGdpValue) / previousGdpValue) * 100;
+
+                    // Обновляем максимальные значения роста и падения для ВВП
+                    if (gdpGrowth > maxGdpGrowth)
+                    {
+                        maxGdpGrowth = gdpGrowth;
+                    }
+                    if (gdpGrowth < maxGdpDecline)
+                    {
+                        maxGdpDecline = gdpGrowth;
+                    }
+                }
+
+                // Вычисляем процентное изменение для ВНП
+                if (previousGnpValue != 0)
+                {
+                    decimal gnpGrowth = ((currentGnpValue - previousGnpValue) / previousGnpValue) * 100;
+
+                    // Обновляем максимальные значения роста и падения для ВНП
+                    if (gnpGrowth > maxGnpGrowth)
+                    {
+                        maxGnpGrowth = gnpGrowth;
+                    }
+                    if (gnpGrowth < maxGnpDecline)
+                    {
+                        maxGnpDecline = gnpGrowth;
+                    }
+                }
+            }
+
+            string result = $"Максимальный процент роста ВВП: {maxGdpGrowth:F2}%\n" +
+                            $"Максимальный процент падения ВВП: {maxGdpDecline:F2}%\n" +
+                            $"Максимальный процент роста ВНП: {maxGnpGrowth:F2}%\n" +
+                            $"Максимальный процент падения ВНП: {maxGnpDecline:F2}%";
+
+            richTextBox1.Text = result;
         }
     }
 }
