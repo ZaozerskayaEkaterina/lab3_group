@@ -195,7 +195,7 @@ namespace lab3
 
         private decimal CalculateMovingAverage(string columnName)
         {
-            int period = 3; // Период для скользящей средней (например, 3 года)
+            int period = (int)numericUpDown1.Value;
             decimal total = 0;
             int count = 0;
 
