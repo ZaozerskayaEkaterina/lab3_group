@@ -34,7 +34,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(78, 172);
+            this.button1.Location = new System.Drawing.Point(216, 172);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(106, 54);
             this.button1.TabIndex = 0;
@@ -43,12 +43,13 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(460, 283);
+            this.button2.Location = new System.Drawing.Point(591, 172);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(106, 54);
             this.button2.TabIndex = 1;
-            this.button2.Text = "button2";
+            this.button2.Text = "вариант 5";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 

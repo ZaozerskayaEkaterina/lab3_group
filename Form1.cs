@@ -16,5 +16,11 @@ namespace lab3
         {
             InitializeComponent();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Variant5 variant5 = new Variant5();
+            variant5.Show();
+        }
     }
 }
