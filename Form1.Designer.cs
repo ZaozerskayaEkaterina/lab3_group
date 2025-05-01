@@ -34,21 +34,23 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(78, 172);
+            this.button1.Location = new System.Drawing.Point(216, 172);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(106, 54);
             this.button1.TabIndex = 0;
             this.button1.Text = "вариант 4";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.btnVar4_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(296, 172);
+            this.button2.Location = new System.Drawing.Point(631, 172);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(106, 54);
             this.button2.TabIndex = 1;
             this.button2.Text = "вариант 5";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 
