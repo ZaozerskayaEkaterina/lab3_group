@@ -22,5 +22,6 @@ namespace lab3
             Variant_4 variantForm = new Variant_4();
             variantForm.Show();
         }
+
     }
 }
