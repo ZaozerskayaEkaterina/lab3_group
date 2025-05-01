@@ -22,6 +22,7 @@ namespace lab3
             Variant_4 variantForm = new Variant_4();
             variantForm.Show();
         }
+
         private void button2_Click(object sender, EventArgs e)
         {
             Variant5 variant5 = new Variant5();
